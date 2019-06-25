@@ -1,17 +1,16 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <CurCalculator/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CurCalculator from './components/CurCalculator'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    CurCalculator
   }
 }
 </script>
