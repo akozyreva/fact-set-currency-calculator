@@ -115,13 +115,16 @@ export default {
     },
     onChange1:function(event){
       this.onChangeCur(event)
+    },
+    predefinedTargetCur: function(val) {
+      this.selectedTargetCur = val
     }
   },
   computed: {
     secondInputOptions(){
       //console.log(this.selectedBaseCur)
       const baseCurObj = this.currencies.find( el => el.baseCur === this.selectedBaseCur )
-      this.selectedTargetCur = baseCurObj.targetCur[0].name
+      this.predefinedTargetCur(baseCurObj.targetCur[0].name)
       return baseCurObj.targetCur
     },
       resultRate: {
