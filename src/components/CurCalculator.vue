@@ -71,6 +71,17 @@ export default {
             val: 0.9960
           }
         ]
+      },
+      {
+        id: 4,
+        baseCur: "Britisch Pfund",
+        targetCur: [
+          {
+            id: 41,
+            name: 'CAD',
+            val: 1.7574
+          }
+        ]
       }
     
     ],  
@@ -87,7 +98,7 @@ export default {
     this.selectedTargetCur = this.currencies[0].targetCur[0].name
     this.rate = this.round(this.currencies[0].targetCur[0].val)
     this.convertedVal1 = this.rate
-    console.log(this.selectedBaseCur)
+    //console.log(this.selectedBaseCur)
   },
   methods: {
     round(val) {
