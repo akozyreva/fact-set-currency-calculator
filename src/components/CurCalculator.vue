@@ -12,10 +12,10 @@
     </div>
     <div class="cur-wrapper">
       <select v-model="selectedBaseCur" @change="onChange($event)">
-        <option v-for="cur in currencies" :value="cur.baseCur" >{{ cur.baseCur }}</option>
+        <option v-for="cur in currencies" :value="cur.baseCur" :key="cur.id">{{ cur.baseCur}}</option>
       </select>
       <select  v-model="selectedTargetCur" @change="onChange1($event)" >
-        <option v-for="(item, index) in secondInputOptions" :value="item.name" >{{ item.name }}
+        <option v-for="item in secondInputOptions" :value="item.name" :key="item.id" >{{ item.name }}
         </option>
       </select>  
       </div>   
@@ -29,36 +29,44 @@ export default {
   data: function() {
     return {
       currencies: [
-    	{
-      	baseCur: "Euro",
+      {
+        id: 1,
+        baseCur: "Euro",
         targetCur: [
-          {
+          { 
+            id: 11,
             name: 'US Dollar',
             val: 1.2897
           },
           {
+            id: 12,
             name: 'Schweizer Franken',
             val: 1.3135
           },
           {
+            id: 13,
             name: 'Britisch Pfund',
             val: 0.8631
           }
         ]
       },
       {
-      	baseCur: "US Dollar",
+        id: 2,
+        baseCur: "US Dollar",
         targetCur: [
           {
+            id: 21,
             name: 'JPY',
             val: 109.6200
           }
         ]
       },
       {
-      	baseCur: "Schweizer Franken",
+        id: 3,
+        baseCur: "Schweizer Franken",
         targetCur: [
           {
+            id: 31,
             name: 'US Dollar',
             val: 0.9960
           }
@@ -75,7 +83,7 @@ export default {
     
   }, 
   created() {
-   	this.selectedBaseCur = this.currencies[0].baseCur
+    this.selectedBaseCur = this.currencies[0].baseCur
     this.selectedTargetCur = this.currencies[0].targetCur[0].name
     this.rate = this.round(this.currencies[0].targetCur[0].val)
     this.convertedVal1 = this.rate
@@ -89,7 +97,7 @@ export default {
       this.selectedTargetCur = event.target.value
       this.rate = this.secondInputOptions.find(el => el.name === this.selectedTargetCur).val
       this.convertedVal1  = this.round(this.convertedVal * this.rate)
-      console.log(event.target.value);
+      //console.log(event.target.value);
     },
     onChange:function(event){
       this.onChangeCur(event)
@@ -100,8 +108,7 @@ export default {
   },
   computed: {
     secondInputOptions(){
-      const currencies = this.currencies
-      console.log(this.selectedBaseCur)
+      //console.log(this.selectedBaseCur)
       const baseCurObj = this.currencies.find( el => el.baseCur === this.selectedBaseCur )
       this.selectedTargetCur = baseCurObj.targetCur[0].name
       return baseCurObj.targetCur
@@ -115,7 +122,7 @@ export default {
             if (newVal ==='') {
               this.convertedVal1 =''
             } else {
-            	this.convertedVal1  = this.round(newVal * this.rate)
+              this.convertedVal1  = this.round(newVal * this.rate)
             }
             
         }
@@ -127,9 +134,9 @@ export default {
         set(newVal){
             this.convertedVal1 = newVal;
             if (newVal ==='') {
-            	this.convertedVal =''
+              this.convertedVal =''
             } else {
-            	 this.convertedVal  =  this.round(this.convertedVal1 / this.rate)
+              this.convertedVal  =  this.round(this.convertedVal1 / this.rate)
             }
         }
     }
