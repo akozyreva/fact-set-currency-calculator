@@ -1,8 +1,17 @@
 # fact-set-currency-calculator
 
+## Demo
+
+https://akozyreva.github.io/fact-set-currency-calculator/
+
 ## Project setup
 ```
 npm install
+```
+
+## Deploying to gh-pages
+```
+./publichOnGhPages.sh
 ```
 
 ### Compiles and hot-reloads for development
