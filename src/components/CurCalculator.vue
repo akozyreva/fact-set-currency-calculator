@@ -1,29 +1,27 @@
 <template>
   <div class="main-cur-calc-wrapper">
-  <!--<p>{{ selectedBaseCur }}</p>
-  <p>{{ selectedTargetCur }}</p>
-  <p>{{ secondInputOptions }}</p> -->
   <div class="main-sings-wrappers"> 
-    <div v-if="(resultRate || resultRate === 0) && (resultRate1 || resultRate1 === 0)" class="sign-wrapper">
-      <p class="sign-base-cur">{{ resultRate }} {{ selectedBaseCur }} equals </p>
-      <p class="sign-selected-cur"> {{resultRate1 }} {{ selectedTargetCur }}</p>
+    <div v-if="(resultBaseRate || resultBaseRate === 0) && (resultSelectedRate || resultSelectedRate === 0)" class="sign-wrapper">
+      <p class="sign-base-cur">{{ resultBaseRate }} {{ selectedBaseCur }} equals </p>
+      <p class="sign-selected-cur"> {{resultSelectedRate }} {{ selectedTargetCur }}</p>
     </div>
-    <div v-else>
-      <p>1 {{ selectedBaseCur }} equals  {{rate }} {{ selectedTargetCur }}</p>
+    <div v-else class="sign-wrapper">
+      <p class="sign-base-cur">1 {{ selectedBaseCur }} equals </p>
+      <p class="sign-selected-cur">{{ rate }} {{ selectedTargetCur }}</p>
     </div>
     <p class="wrapper-date">{{currentDate}}</p>
   </div>
     <div class="main-cur-wrapper">
         <div class="cur-wrapper">
-      <input type="number" v-model="resultRate">
-      <input type="number"  v-model="resultRate1"> 
+      <input type="number" v-model="resultBaseRate">
+      <input type="number"  v-model="resultSelectedRate"> 
     </div>
     <div class="cur-wrapper">
-      <select v-model="selectedBaseCur" @change="onChange($event)">
+      <select v-model="selectedBaseCur" @change="trigBaseCur($event)">
         <option v-for="cur in currencies" :value="cur.baseCur" :key="cur.id">{{ cur.baseCur}}</option>
       </select>
-      <select  v-model="selectedTargetCur" @change="onChange1($event)" >
-        <option v-for="item in secondInputOptions" :value="item.name" :key="item.id" >{{ item.name }}
+      <select  v-model="selectedTargetCur" @change="trigTargetCur($event)" >
+        <option v-for="item in targetCurrencies" :value="item.name" :key="item.id" >{{ item.name }}
         </option>
       </select>  
       </div>   
@@ -95,9 +93,9 @@ export default {
     ],  
     selectedBaseCur: '',
     selectedTargetCur: '',
-    convertedVal: 1,
+    convBaseVal: 1,
     rate: 0,
-    convertedVal1: 0
+    convTargVal: 0
     }
     
   }, 
@@ -105,71 +103,66 @@ export default {
     this.selectedBaseCur = this.currencies[0].baseCur
     this.selectedTargetCur = this.currencies[0].targetCur[0].name
     this.rate = this.round(this.currencies[0].targetCur[0].val)
-    this.convertedVal1 = this.rate
-    //console.log(this.selectedBaseCur)
+    this.convTargVal = this.rate
   },
   methods: {
     round(val) {
       return Number(Math.round(val + 'e2')+'e-2')
     },
-    onChangeCur(event) {
+    trigCalcCur(event) {
       this.selectedTargetCur = event.target.value
-      this.rate = this.secondInputOptions.find(el => el.name === this.selectedTargetCur).val
-      this.convertedVal1  = this.round(this.convertedVal * this.rate)
-      //console.log(event.target.value);
+      this.rate = this.targetCurrencies.find(el => el.name === this.selectedTargetCur).val
+      this.convTargVal  = this.round(this.convBaseVal * this.rate)
     },
-    onChange:function(event){
-      this.onChangeCur(event)
+    trigBaseCur:function(event){
+      this.trigCalcCur(event)
     },
-    onChange1:function(event){
-      this.onChangeCur(event)
+    trigTargetCur:function(event){
+      this.trigCalcCur(event)
     },
     predefinedTargetCur: function(val) {
       this.selectedTargetCur = val
     }
   },
   computed: {
-    secondInputOptions(){
-      //console.log(this.selectedBaseCur)
+    targetCurrencies(){
       const baseCurObj = this.currencies.find( el => el.baseCur === this.selectedBaseCur )
       this.predefinedTargetCur(baseCurObj.targetCur[0].name)
       return baseCurObj.targetCur
     },
-      resultRate: {
+      resultBaseRate: {
         get(){
-            return this.convertedVal;
+            return this.convBaseVal;
         },
         set(newVal){
-            console.log(newVal)
-            //console.log(newVal.charAt(0) === '-')
             if (newVal === '' || newVal.charAt(0) === '-') {
-              this.convertedVal1 =''
-              this.convertedVal =''
+              this.convTargVal =''
+              this.convBaseVal =''
             } else if (newVal.charAt(0) === '0') {
-               this.convertedVal1 = 0
-               this.convertedVal = 0
+               this.convTargVal = 0
+               this.convBaseVal = 0
             } 
             else {
-              this.convertedVal = newVal
-              this.convertedVal1  = this.round(newVal * this.rate)
+              this.convBaseVal = newVal
+              this.convTargVal  = this.round(newVal * this.rate)
             }
             
         }
     },
-     resultRate1: {
+     resultSelectedRate: {
         get(){
-            return this.convertedVal1;
+            return this.convTargVal;
         },
         set(newVal){
             if (newVal === '' ||  newVal.charAt(0) === '-') {
-              this.convertedVal =''
-              this.convertedVal1 =''
+              this.convBaseVal =''
+              this.convTargVal =''
             }  else if (newVal.charAt(0) === '0') {
-               this.convertedVal1 = 0
-               this.convertedVal = 0
+               this.convTargVal = 0
+               this.convBaseVal = 0
             } else {
-              this.convertedVal1 = newVal 
-              this.convertedVal  =  this.round(this.convertedVal1 / this.rate)
+              this.convTargVal = newVal 
+              this.convBaseVal  =  this.round(this.convTargVal / this.rate)
             }
         }
     },
