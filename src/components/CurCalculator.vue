@@ -3,14 +3,16 @@
   <!--<p>{{ selectedBaseCur }}</p>
   <p>{{ selectedTargetCur }}</p>
   <p>{{ secondInputOptions }}</p> -->
-  <div v-if="(resultRate || resultRate === 0) && (resultRate1 || resultRate1 === 0)" class="sign-wrapper">
+  <div class="main-sings-wrappers"> 
+    <div v-if="(resultRate || resultRate === 0) && (resultRate1 || resultRate1 === 0)" class="sign-wrapper">
       <p class="sign-base-cur">{{ resultRate }} {{ selectedBaseCur }} equals </p>
       <p class="sign-selected-cur"> {{resultRate1 }} {{ selectedTargetCur }}</p>
+    </div>
+    <div v-else>
+      <p>1 {{ selectedBaseCur }} equals  {{rate }} {{ selectedTargetCur }}</p>
+    </div>
+    <p class="wrapper-date">{{currentDate}}</p>
   </div>
-  <div v-else>
-    <p>1 {{ selectedBaseCur }} equals  {{rate }} {{ selectedTargetCur }}</p>
-  </div>
-  <p>{{currentDate}}</p>
     <div class="main-cur-wrapper">
         <div class="cur-wrapper">
       <input type="number" v-model="resultRate">
@@ -205,16 +207,23 @@ export default {
   .sign-wrapper {
     display: table-footer-group
   }
-  .sign-base-cur {
+  .sign-base-cur{
     font-size: 16px;
     color: #878787;
-    margin: 0;
-    padding: 0;
     float: left;
   }
   .sign-selected-cur {
     font-size: 36px;
-    margin: 22px 0;
-    padding: 0;
+    margin: 22px 0 0;
+  }
+
+  .wrapper-date {
+    float: left;
+    color: #757575;
+    font-size: 12px;
+  }
+
+  .main-sings-wrappers {
+    display: inline-block;
   }
 </style>
