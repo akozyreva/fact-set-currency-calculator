@@ -4,10 +4,11 @@
   <p>{{ selectedTargetCur }}</p>
   <p>{{ secondInputOptions }}</p>
   
-  <p>{{ resultRate }} {{ selectedBaseCur }} equals  {{resultRate1 }} {{ selectedTargetCur }}</p>
+  <p v-if="(resultRate || resultRate === 0) && (resultRate1 || resultRate1 === 0)">{{ resultRate }} {{ selectedBaseCur }} equals  {{resultRate1 }} {{ selectedTargetCur }}</p>
+  <p v-else>1 {{ selectedBaseCur }} equals  {{rate }} {{ selectedTargetCur }}</p>
     <div class="main-cur-wrapper">
         <div class="cur-wrapper">
-      <input type="number"  v-model="resultRate">
+      <input type="number" v-model="resultRate">
       <input type="number"  v-model="resultRate1"> 
     </div>
     <div class="cur-wrapper">
@@ -132,10 +133,17 @@ export default {
             return this.convertedVal;
         },
         set(newVal){
-            this.convertedVal = newVal;
-            if (newVal ==='') {
+            console.log(newVal)
+            //console.log(newVal.charAt(0) === '-')
+            if (newVal === '' || newVal.charAt(0) === '-') {
               this.convertedVal1 =''
-            } else {
+              this.convertedVal =''
+            } else if (newVal.charAt(0) === '0') {
+               this.convertedVal1 = 0
+               this.convertedVal = 0
+            } 
+            else {
+              this.convertedVal = newVal
               this.convertedVal1  = this.round(newVal * this.rate)
             }
             
@@ -146,10 +154,11 @@ export default {
             return this.convertedVal1;
         },
         set(newVal){
-            this.convertedVal1 = newVal;
-            if (newVal ==='') {
+            if (newVal === '' ||  newVal.charAt(0) === '-') {
               this.convertedVal =''
+              this.convertedVal1 =''
             } else {
+              this.convertedVal1 = newVal 
               this.convertedVal  =  this.round(this.convertedVal1 / this.rate)
             }
         }
