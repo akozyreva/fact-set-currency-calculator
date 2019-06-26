@@ -1,11 +1,16 @@
 <template>
-  <div>
-  <p>{{ selectedBaseCur }}</p>
+  <div class="main-cur-calc-wrapper">
+  <!--<p>{{ selectedBaseCur }}</p>
   <p>{{ selectedTargetCur }}</p>
-  <p>{{ secondInputOptions }}</p>
-  
-  <p v-if="(resultRate || resultRate === 0) && (resultRate1 || resultRate1 === 0)">{{ resultRate }} {{ selectedBaseCur }} equals  {{resultRate1 }} {{ selectedTargetCur }}</p>
-  <p v-else>1 {{ selectedBaseCur }} equals  {{rate }} {{ selectedTargetCur }}</p>
+  <p>{{ secondInputOptions }}</p> -->
+  <div v-if="(resultRate || resultRate === 0) && (resultRate1 || resultRate1 === 0)" class="sign-wrapper">
+      <p class="sign-base-cur">{{ resultRate }} {{ selectedBaseCur }} equals </p>
+      <p class="sign-selected-cur"> {{resultRate1 }} {{ selectedTargetCur }}</p>
+  </div>
+  <div v-else>
+    <p>1 {{ selectedBaseCur }} equals  {{rate }} {{ selectedTargetCur }}</p>
+  </div>
+  <p>{{currentDate}}</p>
     <div class="main-cur-wrapper">
         <div class="cur-wrapper">
       <input type="number" v-model="resultRate">
@@ -157,18 +162,31 @@ export default {
             if (newVal === '' ||  newVal.charAt(0) === '-') {
               this.convertedVal =''
               this.convertedVal1 =''
+            }  else if (newVal.charAt(0) === '0') {
+               this.convertedVal1 = 0
+               this.convertedVal = 0
             } else {
               this.convertedVal1 = newVal 
               this.convertedVal  =  this.round(this.convertedVal1 / this.rate)
             }
         }
+    },
+    currentDate() {
+      const date = new Date();
+      return `${date.getDate()} ${date.toLocaleString('en-us', { month: 'long' })} ${date.getHours()}:${date.getMinutes()} UTC`
     }
   }
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .main-cur-calc-wrapper {
+    overflow: hidden;
+    position: relative;
+    display: block;
+    width: max-content;
+    margin: auto;
+  }
   .main-cur-wrapper {
     overflow: hidden;
     position: relative;
@@ -182,5 +200,21 @@ export default {
     display: block;
     margin: 0 auto;
     margin-bottom: 2vh;
+    height: 30px;
+  }
+  .sign-wrapper {
+    display: table-footer-group
+  }
+  .sign-base-cur {
+    font-size: 16px;
+    color: #878787;
+    margin: 0;
+    padding: 0;
+    float: left;
+  }
+  .sign-selected-cur {
+    font-size: 36px;
+    margin: 22px 0;
+    padding: 0;
   }
 </style>
